@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 把目标对象交给springIoc容器创建 -->
+	<bean id="userService" class="com.hz.service.UserServiceImpl"/>
+	
+	<!--将切面类交给spring的容器进行管理  -->
+	<bean id="myAspectXml" class="com.hz.aspectj.MyAspectXml"/>
+	
+	
+	<aop:config>
+		
+		<aop:aspect ref="myAspectXml">
+			<!--切入点表达式的编写规范  
+		pointcut=""
+		execution()  固定的，不能不写
+		方法的访问权限修饰符可以省略不写 pointcut="execution(void com.hz.service.UserServiceImpl.save())"
+		
+		方法的返回值  不能省略但是可以用*好替代  pointcut="execution(* com.hz.service.UserServiceImpl.save())"
+		
+		包名可以省，但是不建议省略，一般建议pointcut="execution(* com.hz.service.*Impl.save())
+		指定方法可以用通配符     pointcut="execution(* com.hz.service.*Impl.save*())
+		参数列表用两点替代       pointcut="execution(* com.hz.service.*Impl.save*(..))"
+		-->
+			<aop:before method="log()" 
+			pointcut="execution(* com.hz.service.*.save*(..))"/>
+		</aop:aspect>
+	
+	</aop:config>
+	
+	
+</beans>

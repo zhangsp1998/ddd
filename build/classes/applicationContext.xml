@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 把目标对象交给springIoc容器创建 -->
+	<bean id="userService" class="com.hz.service.UserServiceImpl"/>
+	
+	<!--将切面类交给spring的容器进行管理  -->
+	<bean id="myAspectXml" class="com.hz.aspectj.MyAspectXml"/>
+	
+	<!-- aop的配置 -->
+	<aop:config>
+		<!-- 用户编写的通知或者增强用aop:aspect -->
+		<aop:aspect ref="myAspectXml">
+			
+			<!--
+			method  指定具体的通知或者增强  log()
+			pointcut  切入点表达式 execution()  固定不变，必须有
+			  -->
+			<aop:before method="log()" 
+			pointcut="execution(public void com.hz.service.UserServiceImpl.save())"/>
+		</aop:aspect>
+	
+	</aop:config>
+	
+	
+</beans>
